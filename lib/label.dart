@@ -35,26 +35,29 @@ class _LabelPage extends State {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Container(
-              height: 100,
-              width: 100,
-              child: (image != null
-                  ? CustomPaint(
-                      foregroundPainter: LabelPainter(image!),
-                    )
-                  : Text("cos")))
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Text('abc'),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        body: Center(
+          child: image == null
+              ? CircularProgressIndicator()
+              : Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: FittedBox(
+                    child: SizedBox(
+                      width: image!.width.toDouble(),
+                      height: image!.height.toDouble(),
+                      child: CustomPaint(
+                        painter: LabelPainter(image!),
+                      ),
+                    ),
+                  ),
+                ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: Text('abc'),
+        ),
+      );
 }
 
 class LabelPainter extends CustomPainter {

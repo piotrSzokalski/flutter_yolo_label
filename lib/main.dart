@@ -83,12 +83,11 @@ class _MyHomePageState extends State<MyHomePage> {
           //Image.file(File(imagePath))
         ],
       ),
-
       floatingActionButton: FloatingActionButton(
         onPressed: _takePicture,
         tooltip: 'take_picture',
         child: const Icon(Icons.add_a_photo),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }
