@@ -42,7 +42,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void _takePicture() async {
     try {
       var _image = await _cameraController.takePicture();
-      print(_image);
       setState(() {
         imagePath = _image.path;
       });
