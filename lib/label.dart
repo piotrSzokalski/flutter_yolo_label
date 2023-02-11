@@ -19,6 +19,8 @@ class _LabelPage extends State {
 
   List<Offset> edges = [];
 
+  late LabelPainter labelPainter;
+
   _LabelPage(String path) {
     this.imagePath = path;
 
@@ -33,6 +35,10 @@ class _LabelPage extends State {
 
     final image = await decodeImageFromList(bytes2);
 
+    if (image != null) {
+      //labelPainter = LabelPainter(image!, edges);
+    }
+
     setState(() => this.image = image);
   }
 
@@ -43,14 +49,20 @@ class _LabelPage extends State {
               ? CircularProgressIndicator()
               : GestureDetector(
                   onPanStart: (details) {
-                    edges.add(details.localPosition);
-                    edges.add(details.localPosition);
+                    setState(() {
+                      edges.add(details.localPosition);
+                      edges.add(details.localPosition);
+                    });
                   },
-                  onPanUpdate: (details) =>
-                      edges[edges.length - 1] = details.localPosition,
+                  onPanUpdate: (details) {
+                    setState(() {
+                      edges[edges.length - 1] = details.localPosition;
+                    });
+                  },
+
                   //onPanEnd:(details) => edges.add(Point(details..dx, details.localPosition.dy)),
                   onPanEnd: (details) {
-                    print(edges.toString());
+                    print(labelPainter.edges.toString());
                     setState(() {
                       edges;
                     });
@@ -63,7 +75,8 @@ class _LabelPage extends State {
                         width: image!.width.toDouble(),
                         height: image!.height.toDouble(),
                         child: CustomPaint(
-                          painter: LabelPainter(image!, edges),
+                          painter: labelPainter =
+                              new LabelPainter(image!, edges),
                         ),
                       ),
                     ),
@@ -89,7 +102,10 @@ class LabelPainter extends CustomPainter {
 
     canvas.drawImage(image, Offset.zero, paint);
 
-    canvas.drawLine(edges[0], edges[1], paint);
+    for (int i = 0; i < edges.length - 1; i += 2) {
+      print('here');
+      canvas.drawLine(edges[i], edges[i + 1], paint);
+    }
 
     // canvas.drawLine(Offset(size.width * 1 / 6, size.height * 1 / 6),
     //     Offset(size.width * 5 / 6, size.height * 5 / 6), paint);
