@@ -56,8 +56,9 @@ class _LabelPage extends State {
                   },
                   onPanUpdate: (details) {
                     setState(() {
-                      edges[edges.length - 1] = details.localPosition;
+                      //edges[edges.length - 1] = details.localPosition;
                     });
+                    edges[edges.length - 1] = details.localPosition;
                   },
 
                   //onPanEnd:(details) => edges.add(Point(details..dx, details.localPosition.dy)),
@@ -84,8 +85,12 @@ class _LabelPage extends State {
                 ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: Text('abc'),
+          onPressed: () {
+            setState(() {
+              edges = [];
+            });
+          },
+          child: Text('cls'),
         ),
       );
 }
@@ -98,15 +103,21 @@ class LabelPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..strokeWidth = 10;
+    final paint = Paint()
+      ..color = Colors.blue
+      ..strokeWidth = 10
+      ..style = PaintingStyle.stroke;
 
     canvas.drawImage(image, Offset.zero, paint);
 
     for (int i = 0; i < edges.length - 1; i += 2) {
       print('here');
-      canvas.drawLine(edges[i], edges[i + 1], paint);
+      //canvas.drawLine(edges[i], edges[i + 1], paint);
+
+      canvas.drawRect(Rect.fromPoints(edges[i], edges[i + 1]), paint);
     }
 
+    //canvas.drawRect(Rect.fromPoints(a, b), paint)
     // canvas.drawLine(Offset(size.width * 1 / 6, size.height * 1 / 6),
     //     Offset(size.width * 5 / 6, size.height * 5 / 6), paint);
   }
