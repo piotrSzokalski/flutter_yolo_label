@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:ui' as ui;
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,7 +17,7 @@ class _LabelPage extends State {
 
   ui.Image? image;
 
-  List<Point> edges = [];
+  List<Offset> edges = [];
 
   _LabelPage(String path) {
     this.imagePath = path;
@@ -44,17 +43,18 @@ class _LabelPage extends State {
               ? CircularProgressIndicator()
               : GestureDetector(
                   onPanStart: (details) {
-                    edges.add(Point(
-                        details.localPosition.dx, details.localPosition.dy));
-                    edges.add(Point(
-                        details.localPosition.dx, details.localPosition.dy));
+                    edges.add(details.localPosition);
+                    edges.add(details.localPosition);
                   },
-                  onPanUpdate: (details) {
-                    edges[edges.length - 1] = Point(
-                        details.localPosition.dx, details.localPosition.dy);
-                  },
+                  onPanUpdate: (details) =>
+                      edges[edges.length - 1] = details.localPosition,
                   //onPanEnd:(details) => edges.add(Point(details..dx, details.localPosition.dy)),
-                  onPanEnd: (details) {},
+                  onPanEnd: (details) {
+                    print(edges.toString());
+                    setState(() {
+                      edges;
+                    });
+                  },
                   child: Container(
                     height: double.infinity,
                     width: double.infinity,
@@ -63,7 +63,7 @@ class _LabelPage extends State {
                         width: image!.width.toDouble(),
                         height: image!.height.toDouble(),
                         child: CustomPaint(
-                          painter: LabelPainter(image!),
+                          painter: LabelPainter(image!, edges),
                         ),
                       ),
                     ),
@@ -79,8 +79,9 @@ class _LabelPage extends State {
 
 class LabelPainter extends CustomPainter {
   final ui.Image image;
+  final List<Offset> edges;
 
-  const LabelPainter(this.image);
+  const LabelPainter(this.image, this.edges);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -88,18 +89,14 @@ class LabelPainter extends CustomPainter {
 
     canvas.drawImage(image, Offset.zero, paint);
 
-    canvas.drawLine(Offset(size.width * 1 / 6, size.height * 1 / 6),
-        Offset(size.width * 5 / 6, size.height * 5 / 6), paint);
+    canvas.drawLine(edges[0], edges[1], paint);
+
+    // canvas.drawLine(Offset(size.width * 1 / 6, size.height * 1 / 6),
+    //     Offset(size.width * 5 / 6, size.height * 5 / 6), paint);
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
+    return true;
   }
-}
-
-class Pair<T1, T2> {
-  T1 a;
-  T2 b;
-  Pair(this.a, this.b);
 }
