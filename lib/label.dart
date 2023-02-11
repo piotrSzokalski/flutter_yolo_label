@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui' as ui;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +17,8 @@ class _LabelPage extends State {
   String imagePath = '';
 
   ui.Image? image;
+
+  List<Point> edges = [];
 
   _LabelPage(String path) {
     this.imagePath = path;
@@ -39,15 +42,29 @@ class _LabelPage extends State {
         body: Center(
           child: image == null
               ? CircularProgressIndicator()
-              : Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  child: FittedBox(
-                    child: SizedBox(
-                      width: image!.width.toDouble(),
-                      height: image!.height.toDouble(),
-                      child: CustomPaint(
-                        painter: LabelPainter(image!),
+              : GestureDetector(
+                  onPanStart: (details) {
+                    edges.add(Point(
+                        details.localPosition.dx, details.localPosition.dy));
+                    edges.add(Point(
+                        details.localPosition.dx, details.localPosition.dy));
+                  },
+                  onPanUpdate: (details) {
+                    edges[edges.length - 1] = Point(
+                        details.localPosition.dx, details.localPosition.dy);
+                  },
+                  //onPanEnd:(details) => edges.add(Point(details..dx, details.localPosition.dy)),
+                  onPanEnd: (details) {},
+                  child: Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    child: FittedBox(
+                      child: SizedBox(
+                        width: image!.width.toDouble(),
+                        height: image!.height.toDouble(),
+                        child: CustomPaint(
+                          painter: LabelPainter(image!),
+                        ),
                       ),
                     ),
                   ),
@@ -79,4 +96,10 @@ class LabelPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return false;
   }
+}
+
+class Pair<T1, T2> {
+  T1 a;
+  T2 b;
+  Pair(this.a, this.b);
 }
