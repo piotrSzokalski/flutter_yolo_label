@@ -4,6 +4,8 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'class_names.dart';
+
 class LabelPage extends StatefulWidget {
   String imagePath = '';
   LabelPage(this.imagePath);
@@ -44,46 +46,60 @@ class _LabelPage extends State {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: Center(
-          child: image == null
-              ? CircularProgressIndicator()
-              : GestureDetector(
-                  onPanStart: (details) {
-                    setState(() {
-                      edges.add(details.localPosition);
-                      edges.add(details.localPosition);
-                    });
-                  },
-                  onPanUpdate: (details) {
-                    setState(() {
-                      edges[edges.length - 1] = details.localPosition;
-                    });
-                  },
-                  child: Container(
-                    height: double.infinity,
-                    width: double.infinity,
-                    child: FittedBox(
-                      child: SizedBox(
-                        width: image!.width.toDouble(),
-                        height: image!.height.toDouble(),
-                        child: CustomPaint(
-                          painter: labelPainter =
-                              new LabelPainter(image!, edges),
-                        ),
+      body: Center(
+        child: image == null
+            ? CircularProgressIndicator()
+            : GestureDetector(
+                onPanStart: (details) {
+                  setState(() {
+                    edges.add(details.localPosition);
+                    edges.add(details.localPosition);
+                  });
+                },
+                onPanUpdate: (details) {
+                  setState(() {
+                    edges[edges.length - 1] = details.localPosition;
+                  });
+                },
+                child: Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: FittedBox(
+                    child: SizedBox(
+                      width: image!.width.toDouble(),
+                      height: image!.height.toDouble(),
+                      child: CustomPaint(
+                        painter: labelPainter = new LabelPainter(image!, edges),
                       ),
                     ),
                   ),
                 ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              edges = [];
-            });
-          },
-          child: Text('cls'),
-        ),
-      );
+              ),
+      ),
+      floatingActionButton: Row(
+        children: [
+          FloatingActionButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Icon(Icons.arrow_back)),
+          FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                edges = [];
+              });
+            },
+            child: Text('cls'),
+          ),
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ClassNamesPage()));
+            },
+            child: Icon(Icons.add),
+          )
+        ],
+      ));
 }
 
 class LabelPainter extends CustomPainter {
