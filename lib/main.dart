@@ -39,9 +39,11 @@ class _MyHomePageState extends State<MyHomePage> {
   late List<CameraDescription> _cameras;
   late CameraController _cameraController;
 
+  late XFile _image;
+
   void _takePicture() async {
     try {
-      var _image = await _cameraController.takePicture();
+      _image = await _cameraController.takePicture();
       setState(() {
         imagePath = _image.path;
         print(imagePath);
@@ -50,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
       print(e);
     }
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => LabelPage(imagePath)));
+        context, MaterialPageRoute(builder: (context) => LabelPage(_image)));
   }
 
   void startCamera() async {

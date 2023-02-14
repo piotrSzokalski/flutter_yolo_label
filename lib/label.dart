@@ -1,21 +1,24 @@
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:document_file_save_plus/document_file_save_plus.dart';
 
 import 'class_names.dart';
 
 class LabelPage extends StatefulWidget {
-  String imagePath = '';
-  LabelPage(this.imagePath);
+  XFile image;
+  LabelPage(this.image);
 
   @override
-  State<StatefulWidget> createState() => _LabelPage(imagePath);
+  State<StatefulWidget> createState() => _LabelPage(image);
 }
 
 class _LabelPage extends State {
-  String imagePath = '';
+  XFile xImage;
 
   ui.Image? image;
 
@@ -23,25 +26,30 @@ class _LabelPage extends State {
 
   late LabelPainter labelPainter;
 
-  _LabelPage(String path) {
-    this.imagePath = path;
-
+  _LabelPage(this.xImage) {
     loadImage();
 
     super.initState();
   }
 
   Future loadImage() async {
-    final data = File(imagePath);
+    final data = File(xImage.path);
     final bytes2 = await data.readAsBytes();
 
     final image = await decodeImageFromList(bytes2);
+
+    print(xImage.path);
 
     if (image != null) {
       //labelPainter = LabelPainter(image!, edges);
     }
 
     setState(() => this.image = image);
+  }
+
+  void save() async {
+    DocumentFileSavePlus.saveFile(
+        await xImage.readAsBytes(), 'YL.jpg', 'image/jpg');
   }
 
   @override
@@ -97,7 +105,11 @@ class _LabelPage extends State {
                   MaterialPageRoute(builder: (context) => ClassNamesPage()));
             },
             child: Icon(Icons.add),
-          )
+          ),
+          FloatingActionButton(
+            onPressed: () => save(),
+            child: Icon(Icons.save),
+          ),
         ],
       ));
 }
