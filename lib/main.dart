@@ -39,18 +39,20 @@ class _MyHomePageState extends State<MyHomePage> {
   late List<CameraDescription> _cameras;
   late CameraController _cameraController;
 
+  late XFile _image;
+
   void _takePicture() async {
     try {
-      var _image = await _cameraController.takePicture();
-      print(_image);
+      _image = await _cameraController.takePicture();
       setState(() {
         imagePath = _image.path;
+        print(imagePath);
       });
     } catch (e) {
       print(e);
     }
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => LabelPage(imagePath)));
+        context, MaterialPageRoute(builder: (context) => LabelPage(_image)));
   }
 
   void startCamera() async {
@@ -70,24 +72,22 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Stack(children: [
-            (_cameraController.value.isInitialized
-                ? CameraPreview(_cameraController)
-                : Text('brak kamery'))
-          ]),
+  Widget build(BuildContext context) => Scaffold(
+        body: Column(
+          children: [
+            Stack(children: [
+              (_cameraController.value.isInitialized
+                  ? CameraPreview(_cameraController)
+                  : Text('brak kamery'))
+            ]),
 
-          //Image.file(File(imagePath))
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _takePicture,
-        tooltip: 'take_picture',
-        child: const Icon(Icons.add_a_photo),
-      ),
-    );
-  }
+            //Image.file(File(imagePath))
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _takePicture,
+          tooltip: 'take_picture',
+          child: const Icon(Icons.add_a_photo),
+        ),
+      );
 }

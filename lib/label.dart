@@ -1,19 +1,24 @@
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:document_file_save_plus/document_file_save_plus.dart';
+
+import 'class_names.dart';
+
 class LabelPage extends StatefulWidget {
-  String imagePath = '';
-  LabelPage(this.imagePath);
+  XFile image;
+  LabelPage(this.image);
 
   @override
-  State<StatefulWidget> createState() => _LabelPage(imagePath);
+  State<StatefulWidget> createState() => _LabelPage(image);
 }
 
 class _LabelPage extends State {
-  String imagePath = '';
+  XFile xImage;
 
   ui.Image? image;
 
@@ -21,19 +26,19 @@ class _LabelPage extends State {
 
   late LabelPainter labelPainter;
 
-  _LabelPage(String path) {
-    this.imagePath = path;
-
+  _LabelPage(this.xImage) {
     loadImage();
 
     super.initState();
   }
 
   Future loadImage() async {
-    final data = File(imagePath);
+    final data = File(xImage.path);
     final bytes2 = await data.readAsBytes();
 
     final image = await decodeImageFromList(bytes2);
+
+    print(xImage.path);
 
     if (image != null) {
       //labelPainter = LabelPainter(image!, edges);
@@ -42,57 +47,71 @@ class _LabelPage extends State {
     setState(() => this.image = image);
   }
 
+  void save() async {
+    DocumentFileSavePlus.saveFile(
+        await xImage.readAsBytes(), 'YL.jpg', 'image/jpg');
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: Center(
-          child: image == null
-              ? CircularProgressIndicator()
-              : GestureDetector(
-                  onPanStart: (details) {
-                    setState(() {
-                      edges.add(details.localPosition);
-                      edges.add(details.localPosition);
-                    });
-                  },
-                  onPanUpdate: (details) {
-                    setState(() {
-                      //edges[edges.length - 1] = details.localPosition;
-                    });
+      body: Center(
+        child: image == null
+            ? CircularProgressIndicator()
+            : GestureDetector(
+                onPanStart: (details) {
+                  setState(() {
+                    edges.add(details.localPosition);
+                    edges.add(details.localPosition);
+                  });
+                },
+                onPanUpdate: (details) {
+                  setState(() {
                     edges[edges.length - 1] = details.localPosition;
-                  },
-
-                  //onPanEnd:(details) => edges.add(Point(details..dx, details.localPosition.dy)),
-                  onPanEnd: (details) {
-                    print(labelPainter.edges.toString());
-                    setState(() {
-                      edges;
-                    });
-                  },
-                  child: Container(
-                    height: double.infinity,
-                    width: double.infinity,
-                    child: FittedBox(
-                      child: SizedBox(
-                        width: image!.width.toDouble(),
-                        height: image!.height.toDouble(),
-                        child: CustomPaint(
-                          painter: labelPainter =
-                              new LabelPainter(image!, edges),
-                        ),
+                  });
+                },
+                child: Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: FittedBox(
+                    child: SizedBox(
+                      width: image!.width.toDouble(),
+                      height: image!.height.toDouble(),
+                      child: CustomPaint(
+                        painter: labelPainter = new LabelPainter(image!, edges),
                       ),
                     ),
                   ),
                 ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              edges = [];
-            });
-          },
-          child: Text('cls'),
-        ),
-      );
+              ),
+      ),
+      floatingActionButton: Row(
+        children: [
+          FloatingActionButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Icon(Icons.arrow_back)),
+          FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                edges = [];
+              });
+            },
+            child: Text('cls'),
+          ),
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ClassNamesPage()));
+            },
+            child: Icon(Icons.add),
+          ),
+          FloatingActionButton(
+            onPressed: () => save(),
+            child: Icon(Icons.save),
+          ),
+        ],
+      ));
 }
 
 class LabelPainter extends CustomPainter {
@@ -111,15 +130,8 @@ class LabelPainter extends CustomPainter {
     canvas.drawImage(image, Offset.zero, paint);
 
     for (int i = 0; i < edges.length - 1; i += 2) {
-      print('here');
-      //canvas.drawLine(edges[i], edges[i + 1], paint);
-
       canvas.drawRect(Rect.fromPoints(edges[i], edges[i + 1]), paint);
     }
-
-    //canvas.drawRect(Rect.fromPoints(a, b), paint)
-    // canvas.drawLine(Offset(size.width * 1 / 6, size.height * 1 / 6),
-    //     Offset(size.width * 5 / 6, size.height * 5 / 6), paint);
   }
 
   @override
