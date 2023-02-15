@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:document_file_save_plus/document_file_save_plus.dart';
 
 import 'class_names.dart';
+import 'utlis.dart';
 
 class LabelPage extends StatefulWidget {
   XFile image;
@@ -48,8 +49,8 @@ class _LabelPage extends State {
   }
 
   void save() async {
-    DocumentFileSavePlus.saveFile(
-        await xImage.readAsBytes(), 'YL.jpg', 'image/jpg');
+    DocumentFileSavePlus.saveFile(await xImage.readAsBytes(),
+        Utilities.generateFileName('jpg'), 'image/jpg');
   }
 
   @override
