@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'global_state.dart';
+
 class ClassNamesPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _ClassNamesPage();
 }
 
 class _ClassNamesPage extends State {
-  final List<String> categoties = ['A'];
+  //inal List<String> categoties = ['A'];
 
   final TextEditingController newCategoryController = TextEditingController();
 
@@ -21,7 +23,7 @@ class _ClassNamesPage extends State {
               TextButton(
                   onPressed: () {
                     setState(() {
-                      categoties.add(newCategoryController.text);
+                      GlobalState.addClassName(newCategoryController.text);
                     });
                     Navigator.pop(context);
                   },
@@ -31,12 +33,19 @@ class _ClassNamesPage extends State {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text('wybierz kategorie'),
+        ),
         body: ListView.separated(
-            itemCount: categoties.length,
+            itemCount: GlobalState.getClassNames().length,
             itemBuilder: (context, index) {
               return ListTile(
-                title: Text(categoties[index]),
-                onTap: () {},
+                title: Text(GlobalState.getClassNames()[index]),
+                onTap: () {
+                  print('tap $index');
+                  GlobalState.addRecord(index);
+                  Navigator.pop(context);
+                },
               );
             },
             separatorBuilder: (BuildContext context, int index) =>
