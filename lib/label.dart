@@ -89,11 +89,18 @@ class _LabelPage extends State {
                   });
                 },
                 onPanEnd: (details) {
-                  GlobalState.addRecordBoundaries(edges[0], edges[1]);
+                  GlobalState.addRecordBoundaries(
+                      edges[edges.length - 2], edges[edges.length - 1]);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ClassNamesPage()));
+                          builder: (context) => ClassNamesPage(() {
+                                setState(() {
+                                  edges.removeLast();
+                                  edges.removeLast();
+                                });
+                                print(edges);
+                              })));
                 },
                 child: Container(
                   height: double.infinity,

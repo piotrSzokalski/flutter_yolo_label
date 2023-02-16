@@ -3,14 +3,20 @@ import 'package:flutter/material.dart';
 import 'global_state.dart';
 
 class ClassNamesPage extends StatefulWidget {
+  VoidCallback cancel;
+  ClassNamesPage(this.cancel);
   @override
-  State<StatefulWidget> createState() => _ClassNamesPage();
+  State<StatefulWidget> createState() => _ClassNamesPage(cancel);
 }
 
 class _ClassNamesPage extends State {
   //inal List<String> categoties = ['A'];
 
   final TextEditingController newCategoryController = TextEditingController();
+
+  VoidCallback cancel;
+
+  _ClassNamesPage(this.cancel);
 
   Future openAddCategoryDialog() => showDialog(
       context: context,
@@ -58,7 +64,8 @@ class _ClassNamesPage extends State {
                 },
                 child: Icon(Icons.add)),
             FloatingActionButton(
-                onPressed: () {}, child: Icon(Icons.arrow_back)),
+                onPressed: () => {cancel(), Navigator.pop(context)},
+                child: Icon(Icons.cancel)),
           ],
         ),
       );
