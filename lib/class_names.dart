@@ -57,6 +57,8 @@ class _ClassNamesPage extends State {
             separatorBuilder: (BuildContext context, int index) =>
                 const Divider(color: Colors.black)),
         floatingActionButton: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             FloatingActionButton(
                 onPressed: () {

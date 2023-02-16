@@ -118,20 +118,14 @@ class _LabelPage extends State {
               ),
       ),
       floatingActionButton: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           FloatingActionButton(
               onPressed: () {
                 Navigator.pop(context);
               },
               child: Icon(Icons.arrow_back)),
-          FloatingActionButton(
-            onPressed: () {
-              setState(() {
-                edges = [];
-              });
-            },
-            child: Text('cls'),
-          ),
           FloatingActionButton(
             onPressed: () => save(context),
             child: Icon(Icons.save),
