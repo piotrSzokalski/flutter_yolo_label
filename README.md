@@ -6,16 +6,10 @@ Nieskończona ale mam nadzeje że na zaliczenie wystarczy.
 
 Aplikacja inspirowana https://github.com/developer0hye/Yolo_Label
 
-# Instrukcje
+## Instrukcje
 * Poczekaj aż włączy się kamera, zanim to się stanie na ekranie pojawi się "czerwony ekran śmierci"
 * Zrub zdięcie
-* Naciskając przycisk plus dodaj kategorie
-* Naciskając przycisk zapisu zamisz zdięcie - zapisane zostaną w ścieżce pobranych plilków
-
-
-
-
-
-
-
-
+* Zazacz obszar zdięcia - nie dział poprwanie zaznacza tylko częś ekranu
+* Dodaj kategorie lub anuluj
+* Wybierz kategorie lub anuluj
+* Nacisnij przycisk zapisu - zdięcie, pliktekstowy z granicami obiektu i plik tekstowy z kategoriami zapisane zostaną w ścieżce pobranych plilków, na razie format nie zgodzy z oczekiwaniami modli YOLO
