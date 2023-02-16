@@ -18,13 +18,8 @@ class GlobalState {
 
   static List<String> getRecords() => List.unmodifiable(_records);
 
-  static void addRecord(int category) => _records[_recordsIndex++] =
-      '${category}${_lastPoints[0]} ${_lastPoints[1]}';
-
-  // static void addRecordBoundaries(Offset p1, Offset p2) =>
-  //     (_records[_recordsIndex].isNotEmpty)
-  //         ? _records[_recordsIndex++] += '$p1 $p2\n'
-  //         : null;
+  static void addRecord(int category) =>
+      _records.add('${category}${_lastPoints[0]} ${_lastPoints[1]}');
 
   static void addRecordBoundaries(Offset p1, Offset p2) =>
       _lastPoints = [p1, p2];
