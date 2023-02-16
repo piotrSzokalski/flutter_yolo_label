@@ -33,12 +33,19 @@ class _ClassNamesPage extends State {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text('wybierz kategorie'),
+        ),
         body: ListView.separated(
             itemCount: GlobalState.getClassNames().length,
             itemBuilder: (context, index) {
               return ListTile(
                 title: Text(GlobalState.getClassNames()[index]),
-                onTap: () {},
+                onTap: () {
+                  print('tap $index');
+                  GlobalState.addRecord(index);
+                  Navigator.pop(context);
+                },
               );
             },
             separatorBuilder: (BuildContext context, int index) =>

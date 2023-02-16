@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 
@@ -6,9 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:document_file_save_plus/document_file_save_plus.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'class_names.dart';
 import 'utlis.dart';
+
+import 'global_state.dart';
 
 class LabelPage extends StatefulWidget {
   XFile image;
@@ -49,8 +53,31 @@ class _LabelPage extends State {
   }
 
   void save() async {
-    DocumentFileSavePlus.saveFile(await xImage.readAsBytes(),
-        Utilities.generateFileName('jpg'), 'image/jpg');
+    // DocumentFileSavePlus.saveFile(await xImage.readAsBytes(),
+    //     Utilities.generateFileName('jpg'), 'image/jpg');
+
+    DocumentFileSavePlus.saveMultipleFiles([
+      await xImage.readAsBytes(),
+      GlobalState.generateBoundingBoxesFile(),
+      GlobalState.generateClassNamesFile()
+    ], [
+      Utilities.generateFileName('jpg'),
+      Utilities.generateFileName('txt'),
+      'classes.txt'
+    ], [
+      'image/jpg',
+      "text/plain",
+      "text/plain"
+    ]);
+
+    GlobalState.clearRecords();
+
+    // Uint8List boundingBoxes = Uint8List.fromList(utf8.encode('test'));
+
+    // DocumentFileSavePlus.saveMultipleFiles(
+    //     [await xImage.readAsBytes(), boundingBoxes],
+    //     [Utilities.generateFileName('jpg'), Utilities.generateFileName('txt')],
+    //     ['image/jpg', "text/plain"]);
   }
 
   @override
@@ -69,6 +96,13 @@ class _LabelPage extends State {
                   setState(() {
                     edges[edges.length - 1] = details.localPosition;
                   });
+                },
+                onPanEnd: (details) {
+                  GlobalState.addRecordBoundaries(edges[0], edges[1]);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ClassNamesPage()));
                 },
                 child: Container(
                   height: double.infinity,
@@ -99,13 +133,6 @@ class _LabelPage extends State {
               });
             },
             child: Text('cls'),
-          ),
-          FloatingActionButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ClassNamesPage()));
-            },
-            child: Icon(Icons.add),
           ),
           FloatingActionButton(
             onPressed: () => save(),
