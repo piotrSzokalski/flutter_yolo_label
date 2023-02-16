@@ -8,8 +8,6 @@ class GlobalState {
 
   static final List<String> _records = [];
 
-  static int _recordsIndex = 0;
-
   static List<Offset> _lastPoints = [];
 
   static List<String> getClassNames() => List.unmodifiable(_classNames);
@@ -44,7 +42,6 @@ class GlobalState {
 
   static void clearRecords() {
     _records.clear();
-    _recordsIndex = 0;
     _lastPoints.clear();
   }
 }

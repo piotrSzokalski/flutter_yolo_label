@@ -52,10 +52,7 @@ class _LabelPage extends State {
     setState(() => this.image = image);
   }
 
-  void save() async {
-    // DocumentFileSavePlus.saveFile(await xImage.readAsBytes(),
-    //     Utilities.generateFileName('jpg'), 'image/jpg');
-
+  void save(BuildContext context) async {
     DocumentFileSavePlus.saveMultipleFiles([
       await xImage.readAsBytes(),
       GlobalState.generateBoundingBoxesFile(),
@@ -71,13 +68,7 @@ class _LabelPage extends State {
     ]);
 
     GlobalState.clearRecords();
-
-    // Uint8List boundingBoxes = Uint8List.fromList(utf8.encode('test'));
-
-    // DocumentFileSavePlus.saveMultipleFiles(
-    //     [await xImage.readAsBytes(), boundingBoxes],
-    //     [Utilities.generateFileName('jpg'), Utilities.generateFileName('txt')],
-    //     ['image/jpg', "text/plain"]);
+    Navigator.pop(context);
   }
 
   @override
@@ -135,7 +126,7 @@ class _LabelPage extends State {
             child: Text('cls'),
           ),
           FloatingActionButton(
-            onPressed: () => save(),
+            onPressed: () => save(context),
             child: Icon(Icons.save),
           ),
         ],
