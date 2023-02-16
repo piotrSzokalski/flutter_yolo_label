@@ -8,12 +8,10 @@ Aplikacja inspirowana https://github.com/developer0hye/Yolo_Label
 
 ## Instrukcje
 * Poczekaj aż włączy się kamera, zanim to się stanie na ekranie pojawi się "czerwony ekran śmierci"
-* 
 ![image](https://user-images.githubusercontent.com/101019797/219264806-9296a5f4-1c1a-4b76-a75b-a62a74cf3034.png)
 
 * Zrub zdięcie
 * Zazacz obszar zdięcia - nie dział poprwanie zaznacza tylko częś ekranu
-* 
 ![image](https://user-images.githubusercontent.com/101019797/219264902-aff1dfa0-db17-4ad2-a3e2-24d8fec00ec0.png)
 
 
