@@ -52,10 +52,7 @@ class _LabelPage extends State {
     setState(() => this.image = image);
   }
 
-  void save() async {
-    // DocumentFileSavePlus.saveFile(await xImage.readAsBytes(),
-    //     Utilities.generateFileName('jpg'), 'image/jpg');
-
+  void save(BuildContext context) async {
     DocumentFileSavePlus.saveMultipleFiles([
       await xImage.readAsBytes(),
       GlobalState.generateBoundingBoxesFile(),
@@ -71,13 +68,7 @@ class _LabelPage extends State {
     ]);
 
     GlobalState.clearRecords();
-
-    // Uint8List boundingBoxes = Uint8List.fromList(utf8.encode('test'));
-
-    // DocumentFileSavePlus.saveMultipleFiles(
-    //     [await xImage.readAsBytes(), boundingBoxes],
-    //     [Utilities.generateFileName('jpg'), Utilities.generateFileName('txt')],
-    //     ['image/jpg', "text/plain"]);
+    Navigator.pop(context);
   }
 
   @override
@@ -98,11 +89,18 @@ class _LabelPage extends State {
                   });
                 },
                 onPanEnd: (details) {
-                  GlobalState.addRecordBoundaries(edges[0], edges[1]);
+                  GlobalState.addRecordBoundaries(
+                      edges[edges.length - 2], edges[edges.length - 1]);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ClassNamesPage()));
+                          builder: (context) => ClassNamesPage(() {
+                                setState(() {
+                                  edges.removeLast();
+                                  edges.removeLast();
+                                });
+                                print(edges);
+                              })));
                 },
                 child: Container(
                   height: double.infinity,
@@ -120,6 +118,8 @@ class _LabelPage extends State {
               ),
       ),
       floatingActionButton: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           FloatingActionButton(
               onPressed: () {
@@ -127,15 +127,7 @@ class _LabelPage extends State {
               },
               child: Icon(Icons.arrow_back)),
           FloatingActionButton(
-            onPressed: () {
-              setState(() {
-                edges = [];
-              });
-            },
-            child: Text('cls'),
-          ),
-          FloatingActionButton(
-            onPressed: () => save(),
+            onPressed: () => save(context),
             child: Icon(Icons.save),
           ),
         ],

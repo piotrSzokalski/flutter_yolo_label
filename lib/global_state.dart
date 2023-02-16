@@ -8,8 +8,6 @@ class GlobalState {
 
   static final List<String> _records = [];
 
-  static int _recordsIndex = 0;
-
   static List<Offset> _lastPoints = [];
 
   static List<String> getClassNames() => List.unmodifiable(_classNames);
@@ -18,14 +16,18 @@ class GlobalState {
 
   static List<String> getRecords() => List.unmodifiable(_records);
 
-  static void addRecord(int category) =>
-      _records.add('${category}${_lastPoints[0]} ${_lastPoints[1]}');
+  static void addRecord(int category) => _records.add(
+      '$category ${_lastPoints[0].dx} ${_lastPoints[0].dy} ${_lastPoints[1].dx - _lastPoints[0].dx}  ${_lastPoints[1].dy - _lastPoints[0].dy}\n');
 
   static void addRecordBoundaries(Offset p1, Offset p2) =>
       _lastPoints = [p1, p2];
 
   static Uint8List generateBoundingBoxesFile() {
-    return Uint8List.fromList(utf8.encode(_records.toString()));
+    return Uint8List.fromList(utf8.encode(_records
+        .toString()
+        .replaceAll('[', '')
+        .replaceAll(']', '')
+        .replaceAll(', ', '')));
   }
 
   static Uint8List generateClassNamesFile() {
@@ -40,7 +42,6 @@ class GlobalState {
 
   static void clearRecords() {
     _records.clear();
-    _recordsIndex = 0;
     _lastPoints.clear();
   }
 }
