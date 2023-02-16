@@ -32,6 +32,11 @@ Aplikacja inspirowana https://github.com/developer0hye/Yolo_Label
 
 ![image](https://user-images.githubusercontent.com/101019797/219265222-80d9c649-32f7-41af-b24b-f2230a3a15be.png)
 
+* Niestety przy każdy zapisie będzie powstawał nowy plik z klasmi a stare pozostaną
+
 ![image](https://user-images.githubusercontent.com/101019797/219265244-a46576a4-941c-4ab4-8fe1-da375e760e72.png)
+
+* Każda linia to - kategria, 1 współżędne punktu,  rużnica pomiędzy 2 a 1 punktem
+
 
 
